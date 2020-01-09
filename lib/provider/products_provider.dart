@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import './product.dart';
@@ -103,15 +104,18 @@ class Products with ChangeNotifier {
     var prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          'https://flutter-update-b4077.firebaseio.com/products/$id.json';
+          'https://flutter-update-b4077.firebaseio.com/products/$id.jso';
       try {
-        await http.patch(url,
+        final response = await http.patch(url,
             body: json.encode({
               'title': newProduct.title,
               'description': newProduct.description,
               'price': newProduct.price,
               'imageUrl': newProduct.imageUrl,
             }));
+        if (response.statusCode >= 400) {
+          throw HttpException('Could not update the product');
+        }
         _items[prodIndex] = newProduct;
         notifyListeners();
       } catch (err) {
