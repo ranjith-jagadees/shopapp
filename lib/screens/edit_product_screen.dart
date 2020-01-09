@@ -86,15 +86,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       try {
         await Provider.of<Products>(context)
             .updateProduct(_editedProduct.id, _editedProduct);
-      } catch (err) {
-        setState(() {
-      _isLoading = false;
-    });
-    // Navigator.of(context).pop();
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('Could not update Product'),duration: Duration(seconds: 15),
-        ));
-      }
+      } catch (err) {}
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
@@ -125,7 +117,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
