@@ -19,13 +19,13 @@ class Product with ChangeNotifier {
     @required this.title,
   });
 
-  Future<void> toggleFavourites() async {
+  Future<void> toggleFavourites(String authToken) async {
     // bool oldStatus = isFavourite;
     isFavourite = !isFavourite;
     notifyListeners();
     try {
       final url =
-          'https://flutter-update-b4077.firebaseio.com/products/$id.jso';
+          'https://flutter-update-b4077.firebaseio.com/products/$id.json?auth=$authToken';
       final response = await http.patch(url,
           body: json.encode({
             'isFavourite': isFavourite,

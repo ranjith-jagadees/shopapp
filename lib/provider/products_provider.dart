@@ -41,6 +41,9 @@ class Products with ChangeNotifier {
     // ),
   ];
 
+  final String authToken;
+  Products(this.authToken, this._items);
+
   List<Product> get items {
     return [..._items];
   }
@@ -54,7 +57,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-update-b4077.firebaseio.com/products.json';
+    final url = 'https://flutter-update-b4077.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final List<Product> loadedProducts = [];
@@ -76,7 +79,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    const url = 'https://flutter-update-b4077.firebaseio.com/products.json';
+    final url = 'https://flutter-update-b4077.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -104,7 +107,7 @@ class Products with ChangeNotifier {
     var prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
-          'https://flutter-update-b4077.firebaseio.com/products/$id.jso';
+          'https://flutter-update-b4077.firebaseio.com/products/$id.json?auth=$authToken';
       try {
         final response = await http.patch(url,
             body: json.encode({

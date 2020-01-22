@@ -26,8 +26,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Auth(),
         ),
-        ChangeNotifierProvider.value(
-          value: Products(),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (ctx, auth, products) =>
+              Products(auth.token, products == null ? [] : products.items),
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
@@ -35,24 +36,31 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: Order())
       ],
       child: Consumer<Auth>(
-        builder: (ctx, authData, child) =>
-          MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-                primarySwatch: Colors.purple,
-                accentColor: Colors.deepOrange,
-                fontFamily: GoogleFonts.lato().toString()),
-            home: authData.isAuth ? ProductsOverview(): AuthScreen(),
-            routes: {
-              ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
-              CartSCreen.routeName: (ctx) => CartSCreen(),
-              OrdersScreen.routeName: (ctx) => OrdersScreen(),
-              UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-              EditProductScreen.routeName: (ctx) => EditProductScreen()
-            },
-          )
-      ),
+          builder: (ctx, authData, child) => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Flutter Demo',
+                theme: ThemeData(
+                    primarySwatch: Colors.purple,
+                    accentColor: Colors.deepOrange,
+                    fontFamily: GoogleFonts.lato().toString()),
+                home: authData.isAuth
+                    ? ProductsOverview()
+                    : FutureBuilder(
+                        future: authData.tryAutoLogin(),
+                        builder: (ctx, authResultSnapshot) =>
+                            authResultSnapshot.connectionState ==
+                                    ConnectionState.waiting
+                                ? CircularProgressIndicator( )
+                                : AuthScreen(),
+                      ),
+                routes: {
+                  ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+                  CartSCreen.routeName: (ctx) => CartSCreen(),
+                  OrdersScreen.routeName: (ctx) => OrdersScreen(),
+                  UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+                  EditProductScreen.routeName: (ctx) => EditProductScreen()
+                },
+              )),
     );
   }
 }
