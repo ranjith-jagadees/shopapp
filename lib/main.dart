@@ -10,8 +10,6 @@ import './provider/order.dart';
 import './screens/orders_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
-import './screens/auth_screen.dart';
-import './provider/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,17 +22,22 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+<<<<<<< HEAD
           value: Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
           update: (ctx, auth, products) =>
               Products(auth.token, products == null ? [] : products.items),
+=======
+          value: Products(),
+>>>>>>> f38b17c755c5a3b1add419838cb3f0529e431b3f
         ),
         ChangeNotifierProvider.value(
           value: Cart(),
         ),
         ChangeNotifierProvider.value(value: Order())
       ],
+<<<<<<< HEAD
       child: Consumer<Auth>(
           builder: (ctx, authData, child) => MaterialApp(
                 debugShowCheckedModeBanner: false,
@@ -61,6 +64,24 @@ class MyApp extends StatelessWidget {
                   EditProductScreen.routeName: (ctx) => EditProductScreen()
                 },
               )),
+=======
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: GoogleFonts.lato().toString()),
+        home: ProductsOverview(),
+        routes: {
+          ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          CartSCreen.routeName: (ctx) => CartSCreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          UserProductsScreen.routeName:(ctx)=>UserProductsScreen(),
+          EditProductScreen.routeName:(ctx)=>EditProductScreen()
+        },
+      ),
+>>>>>>> f38b17c755c5a3b1add419838cb3f0529e431b3f
     );
   }
 }

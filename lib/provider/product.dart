@@ -1,6 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
   final String id;
@@ -9,7 +7,7 @@ class Product with ChangeNotifier {
   final double price;
   final String imageUrl;
   bool isFavourite;
-
+    
   Product({
     @required this.id,
     @required this.description,
@@ -19,6 +17,7 @@ class Product with ChangeNotifier {
     @required this.title,
   });
 
+<<<<<<< HEAD
   Future<void> toggleFavourites(String authToken) async {
     // bool oldStatus = isFavourite;
     isFavourite = !isFavourite;
@@ -38,5 +37,10 @@ class Product with ChangeNotifier {
       isFavourite = !isFavourite;
       notifyListeners();
     }
+=======
+  void toggleFavourites() {
+    isFavourite = !isFavourite;
+    notifyListeners();
+>>>>>>> f38b17c755c5a3b1add419838cb3f0529e431b3f
   }
 }
